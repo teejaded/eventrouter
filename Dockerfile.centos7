@@ -12,7 +12,9 @@ RUN mkdir /go
 
 ENV GOPATH=/go
 
-RUN yum -y install golang git
+RUN yum -y install epel-release \
+ && yum -y install golang git
+
 
 WORKDIR /go
 
