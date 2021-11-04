@@ -3,6 +3,6 @@ WORKDIR  /go/src/github.com/openshift/eventrouter
 COPY . .
 RUN go build .
 
-FROM registry.ci.openshift.org/ocp/4.6:base
+FROM registry.ci.openshift.org/ocp/builder:rhel-8-base-openshift-4.6
 COPY --from=builder /go/src/github.com/openshift/eventrouter/eventrouter /bin/eventrouter
 CMD ["/bin/eventrouter", "-v", "3", "-logtostderr"]
