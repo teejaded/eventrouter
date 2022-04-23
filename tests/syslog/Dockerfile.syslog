@@ -1,0 +1,5 @@
+FROM registry.access.redhat.com/ubi8/ubi
+
+RUN dnf install rsyslog -y
+COPY rsyslog.conf /etc/rsyslog.conf
+CMD /usr/sbin/rsyslogd -n

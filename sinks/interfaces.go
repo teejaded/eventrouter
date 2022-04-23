@@ -73,6 +73,16 @@ func ManufactureSink() (e EventSinkInterface) {
 			panic(err.Error())
 		}
 		return e
+	case "syslog":
+		viper.SetDefault("syslogAddress", []string{"syslog:514"})
+
+		address := viper.GetString("syslogAddress")
+
+		e, err := NewSyslogSink(address)
+		if err != nil {
+			panic(err.Error())
+		}
+		return e
 	// case "logfile"
 	default:
 		err := errors.New("Invalid Sink Specified")

@@ -1,0 +1,24 @@
+version: "2"
+
+services:
+  app:
+    image: app:latest
+    build:
+      context: ../../
+      dockerfile: tests/syslog/Dockerfile
+    # volumes:
+    #   - ../../:/go/src/github.com/openshift/eventrouter
+    working_dir: /go/src/github.com/openshift/eventrouter
+    command: ["go", "run", "tests/syslog/main.go"]
+    links:
+      - syslog
+    environment:
+      SYSLOG_ADDRESS: syslog:5140
+    depends_on:
+      - "syslog"
+
+  syslog:
+    image: syslog:latest
+    build:
+      context: .
+      dockerfile: tests/syslog/Dockerfile.syslog
