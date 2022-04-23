@@ -75,10 +75,12 @@ func ManufactureSink() (e EventSinkInterface) {
 		return e
 	case "syslog":
 		viper.SetDefault("syslogAddress", []string{"syslog:514"})
+		viper.SetDefault("syslogSrcHostname", []string{""})
 
 		address := viper.GetString("syslogAddress")
+		srcHostname := viper.GetString("syslogSrcHostname")
 
-		e, err := NewSyslogSink(address)
+		e, err := NewSyslogSink(address, srcHostname)
 		if err != nil {
 			panic(err.Error())
 		}

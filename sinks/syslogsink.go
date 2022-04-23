@@ -28,15 +28,17 @@ import (
 
 // SyslogSink implements the EventSinkInterface
 type SyslogSink struct {
-	address string
-	conn    net.Conn
-	mu      sync.Mutex
+	address     string
+	srcHostname string
+	conn        net.Conn
+	mu          sync.Mutex
 }
 
 // NewSyslogSink will create a new SyslogSink with default options, returned as an EventSinkInterface
-func NewSyslogSink(address string) (EventSinkInterface, error) {
+func NewSyslogSink(address string, hostname string) (EventSinkInterface, error) {
 	s := SyslogSink{
-		address: address,
+		address:  address,
+		hostname: hostname,
 	}
 
 	err := s.connect()
@@ -63,6 +65,11 @@ func (s *SyslogSink) UpdateEvents(eNew *v1.Event, eOld *v1.Event) {
 	buf := bytes.NewBuffer(make([]byte, 0, 4096))
 
 	eData := NewEventData(eNew, eOld)
+
+	if s.srcHostname != "" {
+		e.Event.Source.Host = s.srcHostname
+	}
+
 	eData.WriteRFC5424(buf)
 
 	s.mu.Lock()
